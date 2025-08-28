@@ -27,7 +27,6 @@
     <Folder Include="src\Controllers\" />
     <Folder Include="src\Api\" />
     <Folder Include="src\Application\" />
-    <Folder Include="src\Infraestructure\" />
     <Folder Include="tests\tests.Integration\" />
     <Folder Include="tests\Tests.Unit\" />
   </ItemGroup>

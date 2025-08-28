@@ -3,12 +3,12 @@
 
 namespace NutriTrack.src.Domain.Entities
 {
-    public class MealRequest
+    public class Meal
     {
         public Guid? UserId { get; set; }
         public DateTime Date { get; set; }
         public MealType Type { get; set; }
-
-        public List<FoodRequest> Food { get; set; }
+        public User User { get; set; }
+        public ICollection<MealFood> MealFoods { get; set; }
     }
 }
