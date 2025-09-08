@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -26,7 +26,8 @@
   <ItemGroup>
     <Folder Include="src\Controllers\" />
     <Folder Include="src\Api\" />
-    <Folder Include="src\Application\" />
+    <Folder Include="src\Infraestructure\Persistence\Repositories\" />
+    <Folder Include="src\Services\" />
     <Folder Include="tests\tests.Integration\" />
     <Folder Include="tests\Tests.Unit\" />
   </ItemGroup>

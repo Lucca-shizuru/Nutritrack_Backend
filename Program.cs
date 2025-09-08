@@ -1,4 +1,7 @@
 
+using Microsoft.EntityFrameworkCore;
+using NutriTrack.src.Infraestructure.Persistence;
+
 namespace NutriTrack
 {
     public class Program
@@ -9,10 +12,16 @@ namespace NutriTrack
 
             // Add services to the container.
 
+
+
+
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             var app = builder.Build();
 
