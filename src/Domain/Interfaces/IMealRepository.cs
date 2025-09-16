@@ -1,6 +1,6 @@
 ﻿using NutriTrack.src.Domain.Entities;
 
-namespace NutriTrack.src.Application.Interfaces
+namespace NutriTrack.src.Domain.Interfaces
 {
     public interface IMealRepository
     {

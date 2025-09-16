@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using NutriTrack.src.Application.Interfaces;
 using NutriTrack.src.Domain.Entities;
+using NutriTrack.src.Domain.Interfaces;
 
 namespace NutriTrack.src.Infraestructure.Persistence.Repositories
 {
