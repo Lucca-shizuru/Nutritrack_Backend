@@ -37,6 +37,7 @@ namespace NutriTrack
                  cfg.RegisterServicesFromAssembly(typeof(CreateMealCommandHandler).Assembly));
 
             builder.Services.AddSingleton<IPassworHashingService, PasswordHashingService>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 
 
