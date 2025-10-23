@@ -1,6 +1,17 @@
-﻿namespace NutriTrack.src.Services
+﻿using NutriTrack.src.Application.Interfaces;
+
+namespace NutriTrack.src.Services
 {
-    public class PasswordHashingService
+    public class PasswordHashingService : IPassworHashingService
     {
+        public string HashPassword(string password)
+        {
+            return BCrypt.Net.BCrypt.HashPassword(password);
+        }
+
+        public bool VerifyPassword(string password, string passwordHash)
+        {
+            return BCrypt.Net.BCrypt.Verify(password, passwordHash);
+        }
     }
 }

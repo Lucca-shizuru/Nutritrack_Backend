@@ -1,9 +1,12 @@
-using MediatR
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using NutriTrack.src.Application.Commands.CreateMeal;
+using NutriTrack.src.Application.Interfaces;
 using NutriTrack.src.Domain.Interfaces;
 using NutriTrack.src.Infraestructure.Persistence;
 using NutriTrack.src.Infraestructure.Persistence.Repositories;
+using NutriTrack.src.Services;
+
 
 namespace NutriTrack
 {
@@ -33,7 +36,7 @@ namespace NutriTrack
             object value = builder.Services.AddMediatR(cfg =>
                  cfg.RegisterServicesFromAssembly(typeof(CreateMealCommandHandler).Assembly));
 
-            builder.Services.AddSingleton<IPasswordHashingService, BCryptPasswordHashingService>();
+            builder.Services.AddSingleton<IPassworHashingService, PasswordHashingService>();
 
 
 

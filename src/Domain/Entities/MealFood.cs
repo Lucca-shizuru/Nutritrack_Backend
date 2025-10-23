@@ -1,17 +1,31 @@
-﻿namespace NutriTrack.src.Domain.Entities
+﻿using NutriTrack.src.Domain.ValueObjects;
+
+namespace NutriTrack.src.Domain.Entities
 {
     public class MealFood
     {
-        public Guid MealId { get; set; }
-        public Guid FoodId { get; set; }
-        public decimal QuantityInGrams { get; set; }
+        public Guid MealId { get; private set; }
+        public Guid FoodId { get; private set; }
+        public decimal QuantityInGrams { get; private set; }
+        public NutritionalInfo NutritionalInfo { get; private set; }
 
-        public decimal Calories { get; set; }
-        public decimal Protein { get; set; }
-        public decimal Carbs { get; set; }
-        public decimal Fat { get; set; }
 
-        public required Meal Meal { get; set; }
-        public required Food Food { get; set; }
+        public Meal Meal { get; private set; }
+        public Food Food { get; private set; }
+
+        private MealFood() { }
+
+        internal MealFood(Guid mealId, Guid foodId, decimal quantityInGrams, NutritionalInfo nutritionalInfo)
+        {
+            if (quantityInGrams <= 0)
+            {
+                throw new ArgumentException("A quantidade em gramas deve ser positiva.", nameof(quantityInGrams));
+            }
+
+            MealId = mealId;
+            FoodId = foodId;
+            QuantityInGrams = quantityInGrams;
+            NutritionalInfo = nutritionalInfo;
+        }
     }
 }

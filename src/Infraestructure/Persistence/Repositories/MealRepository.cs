@@ -28,25 +28,22 @@ namespace NutriTrack.src.Infraestructure.Persistence.Repositories
                 .ToListAsync();
         }
 
-        public async Task Add(Meal meal)
+        public void Add(Meal meal)
         {
-            await _context.Meals.Add(meal);
+             _context.Meals.Add(meal);
         }
 
-        public async Task Update(Meal meal)
+        public void Update(Meal meal)
         {
             _context.Meals.Update(meal);
            
         }
 
-        public async Task Delete(int id)
+        public void Delete(Meal meal)
         {
-            var meal = await _context.Meals.FindAsync(id);
-            if (meal != null)
-            {
                 _context.Meals.Remove(meal);
                
-            }
+          
         }
 
 
