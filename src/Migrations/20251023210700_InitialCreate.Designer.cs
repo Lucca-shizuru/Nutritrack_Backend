@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NutriTrack.src.Infraestructure.Persistence;
@@ -11,9 +12,11 @@ using NutriTrack.src.Infraestructure.Persistence;
 namespace NutriTrack.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251023210700_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,15 +52,12 @@ namespace NutriTrack.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("integer");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("UserId1")
+                    b.Property<int>("UserId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Meals");
                 });
@@ -69,18 +69,6 @@ namespace NutriTrack.Migrations
 
                     b.Property<Guid>("FoodId")
                         .HasColumnType("uuid");
-
-                    b.Property<decimal>("Calories")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("Carbs")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("Fat")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("Protein")
-                        .HasColumnType("numeric");
 
                     b.Property<decimal>("QuantityInGrams")
                         .HasColumnType("numeric");
@@ -108,7 +96,7 @@ namespace NutriTrack.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Password")
+                    b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -119,13 +107,11 @@ namespace NutriTrack.Migrations
 
             modelBuilder.Entity("NutriTrack.src.Domain.Entities.Meal", b =>
                 {
-                    b.HasOne("NutriTrack.src.Domain.Entities.User", "User")
+                    b.HasOne("NutriTrack.src.Domain.Entities.User", null)
                         .WithMany("Meals")
-                        .HasForeignKey("UserId1")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("NutriTrack.src.Domain.Entities.MealFood", b =>
@@ -142,9 +128,44 @@ namespace NutriTrack.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.OwnsOne("NutriTrack.src.Domain.ValueObjects.NutritionalInfo", "NutritionalInfo", b1 =>
+                        {
+                            b1.Property<Guid>("MealFoodMealId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<Guid>("MealFoodFoodId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<decimal>("Calories")
+                                .HasColumnType("numeric")
+                                .HasColumnName("Calories");
+
+                            b1.Property<decimal>("Carbs")
+                                .HasColumnType("numeric")
+                                .HasColumnName("Carbs");
+
+                            b1.Property<decimal>("Fat")
+                                .HasColumnType("numeric")
+                                .HasColumnName("Fat");
+
+                            b1.Property<decimal>("Protein")
+                                .HasColumnType("numeric")
+                                .HasColumnName("Protein");
+
+                            b1.HasKey("MealFoodMealId", "MealFoodFoodId");
+
+                            b1.ToTable("MealsFood");
+
+                            b1.WithOwner()
+                                .HasForeignKey("MealFoodMealId", "MealFoodFoodId");
+                        });
+
                     b.Navigation("Food");
 
                     b.Navigation("Meal");
+
+                    b.Navigation("NutritionalInfo")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("NutriTrack.src.Domain.Entities.Food", b =>

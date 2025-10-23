@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NutriTrack.Migrations
 {
     /// <inheritdoc />
-    public partial class NutriTrack : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,7 +32,7 @@ namespace NutriTrack.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Email = table.Column<string>(type: "text", nullable: false),
-                    Password = table.Column<string>(type: "text", nullable: false)
+                    PasswordHash = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -44,17 +44,16 @@ namespace NutriTrack.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: true),
+                    UserId = table.Column<int>(type: "integer", nullable: false),
                     Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Type = table.Column<int>(type: "integer", nullable: false),
-                    UserId1 = table.Column<int>(type: "integer", nullable: false)
+                    Type = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Meals", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Meals_Users_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_Meals_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -90,9 +89,9 @@ namespace NutriTrack.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Meals_UserId1",
+                name: "IX_Meals_UserId",
                 table: "Meals",
-                column: "UserId1");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MealsFood_FoodId",

@@ -7,7 +7,7 @@ namespace NutriTrack.src.Domain.Entities
     public class Meal
     {
         public Guid Id { get; private set; }
-        public Guid? UserId { get; private set; }
+        public int UserId { get; private set; }
         public DateTime Date { get; private set; }
         public MealType Type { get; private set; }
         private readonly List<MealFood> _mealFoods = new();
@@ -15,7 +15,7 @@ namespace NutriTrack.src.Domain.Entities
 
         private Meal() { }
 
-        public Meal(Guid userId, DateTime date, MealType type)
+        public Meal(int userId, DateTime date, MealType type)
         {
             Id = Guid.NewGuid();
             UserId = userId;

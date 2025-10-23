@@ -1,6 +1,6 @@
 ﻿namespace NutriTrack.src.Application.Interfaces
 {
-    public interface IPassworHashingService
+    public interface IPasswordHashingService
     {
         string HashPassword(string password);
         bool VerifyPassword(string password, string passwordHash);

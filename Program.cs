@@ -1,10 +1,10 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using NutriTrack.src.Application.Commands.CreateMeal;
-using NutriTrack.src.Application.Interfaces;
+using NutriTrack.src.Application.Interfaces; 
 using NutriTrack.src.Domain.Interfaces;
 using NutriTrack.src.Infraestructure.Persistence;
-using NutriTrack.src.Infraestructure.Persistence.Repositories;
+using NutriTrack.src.Infraestructure.Persistence.Repositories; 
 using NutriTrack.src.Services;
 
 
@@ -27,7 +27,10 @@ namespace NutriTrack
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+                 options.UseNpgsql(
+                     builder.Configuration.GetConnectionString("DefaultConnection"),
+                     b => b.MigrationsAssembly("NutriTrack") // Diz à API onde as migrations estão
+             ));
 
             builder.Services.AddScoped<IMealRepository, MealRepository>();
 
@@ -36,7 +39,7 @@ namespace NutriTrack
             object value = builder.Services.AddMediatR(cfg =>
                  cfg.RegisterServicesFromAssembly(typeof(CreateMealCommandHandler).Assembly));
 
-            builder.Services.AddSingleton<IPassworHashingService, PasswordHashingService>();
+            builder.Services.AddSingleton<IPasswordHashingService, PasswordHashingService>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 

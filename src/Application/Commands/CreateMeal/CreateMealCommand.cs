@@ -7,7 +7,7 @@ namespace NutriTrack.src.Application.Commands.CreateMeal
 
     public record CreateMealCommand : IRequest<Guid>
     {
-        public Guid UserId { get; init; }
+        public int UserId { get; init; }
         public DateTime Date { get; init; }
         public MealType Type { get; init; }
     }

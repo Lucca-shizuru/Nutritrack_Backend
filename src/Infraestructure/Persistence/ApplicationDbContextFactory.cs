@@ -9,7 +9,14 @@ namespace NutriTrack.src.Infraestructure.Persistence
         {
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
 
-            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=NutriTrack;Username=postgres;Password=123");
+            var connectionString = "Host=localhost;Port=5432;Database=NutriTrack;Username=postgres;Password=123";
+
+           
+            optionsBuilder.UseNpgsql(connectionString, b =>
+            {
+       
+                b.MigrationsAssembly("NutriTrack");
+            });
 
             return new ApplicationDbContext(optionsBuilder.Options);
         }

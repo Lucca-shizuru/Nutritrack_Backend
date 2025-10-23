@@ -3,9 +3,9 @@
     public class User
     {
         public int Id { get; private set; }
-        public string Name { get; private set; }
-        public string Email { get; private set; }
-        public string PasswordHash { get; private set; }
+        public string Name { get; private set; } = null!;
+        public string Email { get; private set; } = null!;
+        public string PasswordHash { get; private set; } = null!;
 
         private readonly List<Meal> _meals = new();
 

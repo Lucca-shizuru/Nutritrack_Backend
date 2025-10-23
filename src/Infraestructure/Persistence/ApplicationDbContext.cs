@@ -28,6 +28,13 @@ namespace NutriTrack.src.Infraestructure.Persistence
                 navBuilder.Property(ni => ni.Fat).HasColumnName("Fat");
             });
 
+            modelBuilder.Entity<User>(entity =>
+            {
+            
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd();
+            });
+
         }
     }
 }

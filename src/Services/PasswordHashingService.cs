@@ -2,7 +2,7 @@
 
 namespace NutriTrack.src.Services
 {
-    public class PasswordHashingService : IPassworHashingService
+    public class PasswordHashingService : IPasswordHashingService
     {
         public string HashPassword(string password)
         {
