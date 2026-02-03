@@ -13,7 +13,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - nutritrack_data:/var/lib/postgresql/data
+      - nutritrack_data:/var/lib/postgresql
 
   # Painel de Gerenciamento do Postgres 
   pgadmin:
