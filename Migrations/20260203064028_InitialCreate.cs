@@ -45,7 +45,7 @@ namespace NutriTrack.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     UserId = table.Column<int>(type: "integer", nullable: false),
-                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Date = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     Type = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -66,10 +66,10 @@ namespace NutriTrack.Migrations
                     MealId = table.Column<Guid>(type: "uuid", nullable: false),
                     FoodId = table.Column<Guid>(type: "uuid", nullable: false),
                     QuantityInGrams = table.Column<decimal>(type: "numeric", nullable: false),
-                    Calories = table.Column<decimal>(type: "numeric", nullable: false),
-                    Protein = table.Column<decimal>(type: "numeric", nullable: false),
-                    Carbs = table.Column<decimal>(type: "numeric", nullable: false),
-                    Fat = table.Column<decimal>(type: "numeric", nullable: false)
+                    Calories = table.Column<decimal>(type: "numeric(18,2)", precision: 18, scale: 2, nullable: false),
+                    Protein = table.Column<decimal>(type: "numeric(18,2)", precision: 18, scale: 2, nullable: false),
+                    Carbs = table.Column<decimal>(type: "numeric(18,2)", precision: 18, scale: 2, nullable: false),
+                    Fat = table.Column<decimal>(type: "numeric(18,2)", precision: 18, scale: 2, nullable: false)
                 },
                 constraints: table =>
                 {

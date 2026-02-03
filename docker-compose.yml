@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  # Banco de Dados PostgreSQL
+  db:
+    image: postgres:latest
+    container_name: nutritrack_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: NutriTrack
+    ports:
+      - "5432:5432"
+    volumes:
+      - nutritrack_data:/var/lib/postgresql/data
+
+  # Painel de Gerenciamento do Postgres 
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: nutritrack_pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+
+  # Mensageria com RabbitMQ 
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: nutritrack_rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"   # Porta do protocolo de mensagens
+      - "15672:15672" # Porta do Painel Visual (Management UI)
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+volumes:
+  nutritrack_data:

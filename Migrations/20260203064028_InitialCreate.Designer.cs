@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NutriTrack.src.Infraestructure.Persistence;
@@ -11,13 +12,15 @@ using NutriTrack.src.Infraestructure.Persistence;
 namespace NutriTrack.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260203064028_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.8")
+                .HasAnnotation("ProductVersion", "8.0.23")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -44,7 +47,7 @@ namespace NutriTrack.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("Type")
                         .HasColumnType("integer");
@@ -134,19 +137,23 @@ namespace NutriTrack.Migrations
                                 .HasColumnType("uuid");
 
                             b1.Property<decimal>("Calories")
-                                .HasColumnType("numeric")
+                                .HasPrecision(18, 2)
+                                .HasColumnType("numeric(18,2)")
                                 .HasColumnName("Calories");
 
                             b1.Property<decimal>("Carbs")
-                                .HasColumnType("numeric")
+                                .HasPrecision(18, 2)
+                                .HasColumnType("numeric(18,2)")
                                 .HasColumnName("Carbs");
 
                             b1.Property<decimal>("Fat")
-                                .HasColumnType("numeric")
+                                .HasPrecision(18, 2)
+                                .HasColumnType("numeric(18,2)")
                                 .HasColumnName("Fat");
 
                             b1.Property<decimal>("Protein")
-                                .HasColumnType("numeric")
+                                .HasPrecision(18, 2)
+                                .HasColumnType("numeric(18,2)")
                                 .HasColumnName("Protein");
 
                             b1.HasKey("MealFoodMealId", "MealFoodFoodId");
