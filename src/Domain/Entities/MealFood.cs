@@ -4,14 +4,14 @@ namespace NutriTrack.src.Domain.Entities
 {
     public class MealFood
     {
-        public Guid MealId { get; private set; } 
-        public Guid FoodId { get; private set; } 
-        public decimal QuantityInGrams { get; private set; }
-        public NutritionalInfo NutritionalInfo { get; private set; } = null!; 
+        public Guid MealId { get; set; } 
+        public Guid FoodId { get;  set; } 
+        public decimal QuantityInGrams { get; set; }
+        public NutritionalInfo NutritionalInfo { get; set; } = null!; 
 
 
-        public Meal Meal { get; private set; } = null!;
-        public Food Food { get; private set; } = null!;
+        public Meal Meal { get; set; } = null!;
+        public Food Food { get; set; } = null!;
 
         private MealFood() { }
 

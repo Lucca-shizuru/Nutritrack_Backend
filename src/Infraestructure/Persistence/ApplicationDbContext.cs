@@ -24,6 +24,7 @@ namespace NutriTrack.src.Infraestructure.Persistence
 
             modelBuilder.Entity<User>().HasKey(u => u.Id);
 
+
             modelBuilder.Entity<MealFood>(builder =>
             {
                 builder.HasKey(mf => new { mf.MealId, mf.FoodId });
@@ -35,23 +36,28 @@ namespace NutriTrack.src.Infraestructure.Persistence
                     ni.Property(p => p.Carbs).HasColumnName("Carbs").HasPrecision(18, 2);
                     ni.Property(p => p.Fat).HasColumnName("Fat").HasPrecision(18, 2);
                 });
+
+                builder.HasOne(mf => mf.Food)
+                       .WithMany()
+                       .HasForeignKey(mf => mf.FoodId)
+                       .IsRequired();
+
+                builder.HasOne(mf => mf.Meal)
+                       .WithMany(m => m.Foods)
+                       .HasForeignKey(mf => mf.MealId)
+                       .IsRequired();
             });
 
-            modelBuilder.Entity<User>()
-                .HasMany(u => u.Meals)
-                .WithOne()
-                .HasForeignKey(m => m.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Meal>(builder =>
+            {
+                builder.HasKey(m => m.Id);
+                builder.HasOne<User>()
+                       .WithMany(u => u.Meals)
+                       .HasForeignKey(m => m.UserId)
+                       .OnDelete(DeleteBehavior.Cascade);
+            });
 
-            modelBuilder.Entity<MealFood>()
-                .HasOne(mf => mf.Food)
-                .WithMany()
-                .HasForeignKey(mf => mf.FoodId);
 
-            modelBuilder.Entity<MealFood>()
-                .HasOne<Meal>()
-                .WithMany(m => m.Foods) 
-                .HasForeignKey(mf => mf.MealId);
         }
     }
 }

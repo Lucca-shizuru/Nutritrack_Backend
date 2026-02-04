@@ -112,13 +112,13 @@ namespace NutriTrack.Migrations
             modelBuilder.Entity("NutriTrack.src.Domain.Entities.MealFood", b =>
                 {
                     b.HasOne("NutriTrack.src.Domain.Entities.Food", "Food")
-                        .WithMany("MealFoods")
+                        .WithMany()
                         .HasForeignKey("FoodId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("NutriTrack.src.Domain.Entities.Meal", "Meal")
-                        .WithMany("MealFoods")
+                        .WithMany("Foods")
                         .HasForeignKey("MealId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -167,14 +167,9 @@ namespace NutriTrack.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("NutriTrack.src.Domain.Entities.Food", b =>
-                {
-                    b.Navigation("MealFoods");
-                });
-
             modelBuilder.Entity("NutriTrack.src.Domain.Entities.Meal", b =>
                 {
-                    b.Navigation("MealFoods");
+                    b.Navigation("Foods");
                 });
 
             modelBuilder.Entity("NutriTrack.src.Domain.Entities.User", b =>

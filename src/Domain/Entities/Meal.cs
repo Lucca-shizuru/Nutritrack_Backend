@@ -10,8 +10,7 @@ namespace NutriTrack.src.Domain.Entities
         public Guid UserId { get; private set; }
         public DateTime Date { get; private set; }
         public MealType Type { get; private set; }
-        private readonly List<MealFood> _mealFoods = new();
-        public IReadOnlyCollection<MealFood> MealFoods => _mealFoods.AsReadOnly();
+        
 
         private Meal() { }
 
@@ -27,20 +26,20 @@ namespace NutriTrack.src.Domain.Entities
 
         public void AddFood(Guid foodId, string foodName, decimal quantityInGrams, NutritionalInfo nutritionalInfo)
         {
-            if (_mealFoods.Any(mf => mf.FoodId == foodId))
+            if (Foods.Any(mf => mf.FoodId == foodId))
             {
                 throw new InvalidOperationException($"O alimento '{foodName}' já existe nesta refeição.");
             }
 
             var mealFood = new MealFood(this.Id, foodId, quantityInGrams, nutritionalInfo);
-            _mealFoods.Add(mealFood);
+            Foods.Add(mealFood);
         }
 
         public NutritionalInfo GetTotalNutritionalInfo()
         {
-            if (!_mealFoods.Any()) return NutritionalInfo.Zero;
+            if (!Foods.Any()) return NutritionalInfo.Zero;
 
-            return _mealFoods
+            return Foods
                 .Select(mf => mf.NutritionalInfo)
                 .Aggregate(NutritionalInfo.Zero, (current, next) => current + next);
         }

@@ -15,7 +15,7 @@ namespace NutriTrack.src.Infraestructure.Persistence.Repositories
         public async Task<Meal?> GetByIdAsync(Guid id)
         {
             return await _context.Meals
-                .Include(m => m.MealFoods)
+                .Include(m => m.Foods)
                     .ThenInclude(mf => mf.Food) 
                 .FirstOrDefaultAsync(m => m.Id == id);
         }
@@ -23,7 +23,7 @@ namespace NutriTrack.src.Infraestructure.Persistence.Repositories
         public async Task<IEnumerable<Meal>> GetAllAsync()
         {
             return await _context.Meals
-                .Include(m => m.MealFoods)
+                .Include(m => m.Foods)
                     .ThenInclude(mf => mf.Food)
                 .ToListAsync();
         }

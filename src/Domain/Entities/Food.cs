@@ -5,6 +5,6 @@
         public Guid Id { get; set; }
         public required string Name { get; set; }
 
-        public ICollection<MealFood> MealFoods { get; set; } = new List<MealFood>();
+       
     }
 }

@@ -12,13 +12,17 @@ namespace NutriTrack.src.Application.Features.Meals.Commands.CreateMeal
     public class CreateMealCommandHandler : IRequestHandler<CreateMealCommand, Result <Guid>>
     {
         private readonly INutritionalDataService _nutritionalDataService;
+        private readonly IFoodRepository _foodRepository;
         private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
-        public CreateMealCommandHandler(IUserRepository userRepository, IUnitOfWork unitOfWork, INutritionalDataService nutritionalDataService)
+        private readonly IMealRepository _mealRepository;
+        public CreateMealCommandHandler(IUserRepository userRepository, IUnitOfWork unitOfWork, INutritionalDataService nutritionalDataService, IFoodRepository foodRepository, IMealRepository mealRepository)
         {
             _nutritionalDataService = nutritionalDataService;
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
+            _foodRepository = foodRepository;
+            _mealRepository = mealRepository;
         }
         public async Task<Result<Guid>> Handle(CreateMealCommand request, CancellationToken cancellationToken)
         {
@@ -34,11 +38,12 @@ namespace NutriTrack.src.Application.Features.Meals.Commands.CreateMeal
 
 
 
-            var food = new Food
+            var food = await _foodRepository.GetByNameAsync(request.FoodName);
+            if (food == null)
             {
-                Id = Guid.NewGuid(),
-                Name = request.FoodName
-            };
+                food = new Food { Id = Guid.NewGuid(), Name = request.FoodName };
+                _foodRepository.Add(food);
+            }
 
             var baseMacros = nutritionalResult.Value!;
             var factor = (double)request.Quantity / 100.0;
@@ -53,6 +58,9 @@ namespace NutriTrack.src.Application.Features.Meals.Commands.CreateMeal
             var meal = new Meal(request.UserId,request.Date, request.Type);
 
             meal.AddFood(food.Id, request.FoodName, request.Quantity, adjustedMacros);
+
+            _mealRepository.Add(meal);
+
 
             user.AddMeal(meal);
 
