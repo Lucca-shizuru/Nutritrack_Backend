@@ -9,7 +9,7 @@ namespace NutriTrack.src.Infraestructure.Persistence
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
-            // Essencial para o PostgreSQL não reclamar das datas em .NET 8/10
+        
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
 
@@ -24,19 +24,11 @@ namespace NutriTrack.src.Infraestructure.Persistence
 
             modelBuilder.Entity<User>().HasKey(u => u.Id);
 
-            modelBuilder.Entity<MealFood>(entity =>
+            modelBuilder.Entity<MealFood>(builder =>
             {
-                entity.HasKey(mf => new { mf.MealId, mf.FoodId });
+                builder.HasKey(mf => new { mf.MealId, mf.FoodId });
 
-                entity.HasOne(mf => mf.Meal)
-                    .WithMany(m => m.MealFoods)
-                    .HasForeignKey(mf => mf.MealId);
-
-                entity.HasOne(mf => mf.Food)
-                    .WithMany(f => f.MealFoods)
-                    .HasForeignKey(mf => mf.FoodId);
-
-                entity.OwnsOne(mf => mf.NutritionalInfo, ni =>
+                builder.OwnsOne(mf => mf.NutritionalInfo, ni =>
                 {
                     ni.Property(p => p.Calories).HasColumnName("Calories").HasPrecision(18, 2);
                     ni.Property(p => p.Protein).HasColumnName("Protein").HasPrecision(18, 2);
@@ -44,6 +36,22 @@ namespace NutriTrack.src.Infraestructure.Persistence
                     ni.Property(p => p.Fat).HasColumnName("Fat").HasPrecision(18, 2);
                 });
             });
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Meals)
+                .WithOne()
+                .HasForeignKey(m => m.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<MealFood>()
+                .HasOne(mf => mf.Food)
+                .WithMany()
+                .HasForeignKey(mf => mf.FoodId);
+
+            modelBuilder.Entity<MealFood>()
+                .HasOne<Meal>()
+                .WithMany(m => m.Foods) 
+                .HasForeignKey(mf => mf.MealId);
         }
     }
 }

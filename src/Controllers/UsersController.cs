@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using NutriTrack.src.Application.Features.Users.Commands.RegisterUser;
+using NutriTrack.src.Domain.Core;
 
 namespace NutriTrack.src.Controllers
 {
@@ -16,15 +17,19 @@ namespace NutriTrack.src.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterUserCommand command)
         {
-            try
             {
-                var userId = await _mediator.Send(command);
-                return Ok(new { Message = "Usuário registrado com sucesso!", UserId = userId });
-            }
-            catch (InvalidOperationException ex)
-            {
-                return BadRequest(new { Error = ex.Message });
+                var result = await _mediator.Send(command);
+
+                if (!result.IsSuccess)
+                {
+
+                    return BadRequest(new { error = result.Error });
+                }
+
+
+                return CreatedAtAction(nameof(Register), new { id = result.Value }, result.Value);
             }
         }
     }
 }
+    

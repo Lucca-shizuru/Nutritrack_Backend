@@ -1,10 +1,12 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using NutriTrack.src.Application.Commands.CreateMeal;
-using NutriTrack.src.Application.Interfaces; 
+using NutriTrack.src.Application.Features.Meals.Commands.CreateMeal;
+using NutriTrack.src.Application.Features.Users.Commands.CreateMeal;
+using NutriTrack.src.Application.Interfaces;
 using NutriTrack.src.Domain.Interfaces;
+using NutriTrack.src.Infraestructure.ExternalServices;
 using NutriTrack.src.Infraestructure.Persistence;
-using NutriTrack.src.Infraestructure.Persistence.Repositories; 
+using NutriTrack.src.Infraestructure.Persistence.Repositories;
 using NutriTrack.src.Services;
 
 
@@ -32,11 +34,18 @@ namespace NutriTrack
                      b => b.MigrationsAssembly("NutriTrack") // Diz à API onde as migrations estão
              ));
 
+            builder.Services.AddHttpClient<INutritionalDataService, EdamamNutritionalService>(client =>
+            {
+                client.BaseAddress = new Uri("https://api.edamam.com/api/food-database/v2/");
+            });
+
             builder.Services.AddScoped<IMealRepository, MealRepository>();
 
-            builder.Services.AddScoped<IUnitOfWork, ApplicationDbContext>();
+            builder.Services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ApplicationDbContext>());
 
-            object value = builder.Services.AddMediatR(cfg =>
+            builder.Services.AddScoped<IFoodRepository, FoodRepository>();
+
+            builder.Services.AddMediatR(cfg =>
                  cfg.RegisterServicesFromAssembly(typeof(CreateMealCommandHandler).Assembly));
 
             builder.Services.AddSingleton<IPasswordHashingService, PasswordHashingService>();

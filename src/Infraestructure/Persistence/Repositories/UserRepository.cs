@@ -22,5 +22,11 @@ namespace NutriTrack.src.Infraestructure.Persistence.Repositories
            return await _context.Users
                 .FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
         }
+        public async Task<User?> GetByIdAsync(Guid id)
+        {
+            return await _context.Users
+                .Include(u => u.Meals) 
+                .FirstOrDefaultAsync(u => u.Id == id);
+        }
     }
 }

@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="src\Domain\NovaPasta\**" />
+    <Content Remove="src\Domain\NovaPasta\**" />
+    <EmbeddedResource Remove="src\Domain\NovaPasta\**" />
+    <None Remove="src\Domain\NovaPasta\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
@@ -27,7 +34,6 @@
 
   <ItemGroup>
     <Folder Include="src\Api\" />
-    <Folder Include="src\Domain\NovaPasta\" />
     <Folder Include="tests\tests.Integration\" />
     <Folder Include="tests\Tests.Unit\" />
   </ItemGroup>

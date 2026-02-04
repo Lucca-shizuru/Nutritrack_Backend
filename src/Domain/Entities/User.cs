@@ -30,6 +30,11 @@
             Email = newEmail;
         }
 
+        public void AddMeal(Meal meal)
+        {
+            _meals.Add(meal);
+        }
+
         public void ClearDomainEvents() => _domainEvents.Clear();
 
     }

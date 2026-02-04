@@ -12,7 +12,7 @@ using NutriTrack.src.Infraestructure.Persistence;
 namespace NutriTrack.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260203064028_InitialCreate")]
+    [Migration("20260204054648_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -52,8 +52,8 @@ namespace NutriTrack.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("integer");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -82,11 +82,9 @@ namespace NutriTrack.Migrations
 
             modelBuilder.Entity("NutriTrack.src.Domain.Entities.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Email")
                         .IsRequired()

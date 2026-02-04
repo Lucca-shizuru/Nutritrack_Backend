@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using NutriTrack.src.Application.Commands.CreateMeal;
+using NutriTrack.src.Application.Features.Users.Commands.CreateMeal;
 
 namespace NutriTrack.src.Controllers
 {
@@ -19,9 +19,16 @@ namespace NutriTrack.src.Controllers
         public async Task<IActionResult> CreateMeal([FromBody] CreateMealCommand command)
         {
 
-            var newMealId = await _mediator.Send(command);
- 
-            return Ok(new { id = newMealId });
+            var result = await _mediator.Send(command);
+
+            if (!result.IsSuccess)
+            {
+               
+                return BadRequest(new { message = result.Error });
+            }
+
+           
+            return Created(string.Empty, new { id = result.Value });
         }
     }
 }
