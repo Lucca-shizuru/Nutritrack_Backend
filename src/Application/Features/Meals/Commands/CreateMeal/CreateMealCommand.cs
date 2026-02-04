@@ -1,12 +1,13 @@
 ﻿using MediatR;
 using NutriTrack.src.Domain.Core;
 using NutriTrack.src.Domain.Enums;
+using NutriTrack.src.Infraestructure.ExternalServices.Dtos;
 
 namespace NutriTrack.src.Application.Features.Users.Commands.CreateMeal
 {
     
 
-    public record CreateMealCommand : IRequest<Result <Guid>>
+    public record CreateMealCommand : IRequest<Result <MealResponseDto>>
     {
         public Guid UserId { get; init; }
         public required string FoodName { get; init; }

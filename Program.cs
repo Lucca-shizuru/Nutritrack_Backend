@@ -1,3 +1,4 @@
+using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using NutriTrack.src.Application.Features.Meals.Commands.CreateMeal;
@@ -50,6 +51,23 @@ namespace NutriTrack
 
             builder.Services.AddSingleton<IPasswordHashingService, PasswordHashingService>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+            builder.Services.AddMassTransit(x =>
+            {
+              
+                x.AddConsumer<MealCreatedConsumer>();
+
+                x.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.Host("localhost", "/", h =>
+                    {
+                        h.Username("guest");
+                        h.Password("guest");
+                    });
+
+                    cfg.ConfigureEndpoints(context);
+                });
+            });
 
 
 

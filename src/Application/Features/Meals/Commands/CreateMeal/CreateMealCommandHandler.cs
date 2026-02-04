@@ -5,11 +5,12 @@ using NutriTrack.src.Application.Interfaces;
 using NutriTrack.src.Domain.Core;
 using NutriTrack.src.Domain.Entities;
 using NutriTrack.src.Domain.Interfaces;
+using NutriTrack.src.Infraestructure.ExternalServices.Dtos;
 using DomainVO = NutriTrack.src.Domain.ValueObjects;
 
 namespace NutriTrack.src.Application.Features.Meals.Commands.CreateMeal
 {
-    public class CreateMealCommandHandler : IRequestHandler<CreateMealCommand, Result <Guid>>
+    public class CreateMealCommandHandler : IRequestHandler<CreateMealCommand, Result <MealResponseDto>>
     {
         private readonly INutritionalDataService _nutritionalDataService;
         private readonly IFoodRepository _foodRepository;
@@ -24,17 +25,17 @@ namespace NutriTrack.src.Application.Features.Meals.Commands.CreateMeal
             _foodRepository = foodRepository;
             _mealRepository = mealRepository;
         }
-        public async Task<Result<Guid>> Handle(CreateMealCommand request, CancellationToken cancellationToken)
+        public async Task<Result<MealResponseDto>> Handle(CreateMealCommand request, CancellationToken cancellationToken)
         {
             var nutritionalResult = await _nutritionalDataService.GetMacrosAsync(request.FoodName);
 
             if (!nutritionalResult.IsSuccess)
-                return Result<Guid>.Failure(nutritionalResult.Error!);
+                return Result<MealResponseDto>.Failure(nutritionalResult.Error!);
 
            
             var user = await _userRepository.GetByIdAsync(request.UserId);
             if (user == null)
-                return Result<Guid>.Failure("Usuário não encontrado.");
+                return Result<MealResponseDto>.Failure("Usuário não encontrado.");
 
 
 
@@ -60,13 +61,21 @@ namespace NutriTrack.src.Application.Features.Meals.Commands.CreateMeal
             meal.AddFood(food.Id, request.FoodName, request.Quantity, adjustedMacros);
 
             _mealRepository.Add(meal);
-
-
-            user.AddMeal(meal);
+    
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return Result<Guid>.Success(meal.Id);
+
+            var response = new MealResponseDto(
+                meal.Id,
+                request.FoodName,
+                request.Quantity,
+                adjustedMacros.Calories,
+                adjustedMacros.Protein,
+                adjustedMacros.Carbs,
+                adjustedMacros.Fat
+    );
+            return Result<MealResponseDto>.Success(response);
 
 
 
