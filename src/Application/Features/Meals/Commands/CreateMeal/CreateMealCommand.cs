@@ -7,10 +7,10 @@ namespace NutriTrack.src.Application.Features.Users.Commands.CreateMeal
 {
     
 
-    public record CreateMealCommand : IRequest<Result <MealResponseDto>>
+    public class CreateMealCommand : IRequest<Result <MealResponseDto>>
     {
         public Guid UserId { get; init; }
-        public required string FoodName { get; init; }
+        public required List<MealFoodRequest> FoodName { get; init; }
         public decimal Quantity { get; init; }
         public DateTime Date { get; init; }
         public MealType Type { get; init; }

@@ -2,6 +2,7 @@
 {
     public record MealResponseDto(
      Guid Id,
+     string Name,
      string FoodName,
      decimal Quantity,
      decimal Calories,

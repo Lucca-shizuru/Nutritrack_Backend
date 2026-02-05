@@ -1,6 +1,7 @@
 using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using NutriTrack.src.Application.Common.Events;
 using NutriTrack.src.Application.Features.Meals.Commands.CreateMeal;
 using NutriTrack.src.Application.Features.Users.Commands.CreateMeal;
 using NutriTrack.src.Application.Interfaces;
