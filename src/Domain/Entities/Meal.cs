@@ -10,11 +10,20 @@ namespace NutriTrack.src.Domain.Entities
         public Guid UserId { get; private set; }
         public DateTime Date { get; private set; }
         public MealType Type { get; private set; }
-        
+
+
+
+        private readonly List<MealFood> _foods = new();
+        public virtual ICollection<MealFood> Foods => _foods;
+
+        public decimal TotalCalories => _foods.Sum(f => f.NutritionalInfo.Calories);
+        public decimal TotalProtein => _foods.Sum(f => f.NutritionalInfo.Protein);
+        public decimal TotalCarbs => _foods.Sum(f => f.NutritionalInfo.Carbs);
+        public decimal TotalFat => _foods.Sum(f => f.NutritionalInfo.Fat);
+        public decimal TotalQuantity => _foods.Sum(f => f.QuantityInGrams);
+
 
         private Meal() { }
-
-        public virtual ICollection<MealFood> Foods { get; private set; } = new List<MealFood>();
 
         public Meal(Guid userId, DateTime date, MealType type)
         {
@@ -39,7 +48,7 @@ namespace NutriTrack.src.Domain.Entities
         {
             if (!Foods.Any()) return NutritionalInfo.Zero;
 
-            return Foods
+            return _foods
                 .Select(mf => mf.NutritionalInfo)
                 .Aggregate(NutritionalInfo.Zero, (current, next) => current + next);
         }
