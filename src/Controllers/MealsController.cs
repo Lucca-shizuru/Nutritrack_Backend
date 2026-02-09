@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using NutriTrack.src.Application.Features.Meals.Queries.DailySummary;
 using NutriTrack.src.Application.Features.Users.Commands.CreateMeal;
 using NutriTrack.src.Infraestructure.ExternalServices.Dtos;
 
@@ -25,6 +26,15 @@ namespace NutriTrack.src.Controllers
             return result.IsSuccess
                 ? Ok(result.Value)
                 : BadRequest(result.Error);
+        }
+
+        [HttpGet("daily-summary")]
+        public async Task<ActionResult<DailySummaryResponse>> GetDailySummary([FromQuery] Guid userId, [FromQuery] DateTime date)
+        {
+            var query = new GetDailySummaryQuery(userId, date);
+            var result = await _mediator.Send(query);
+
+            return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
         }
     }
 }
