@@ -12,7 +12,7 @@ using NutriTrack.src.Infraestructure.Persistence;
 namespace NutriTrack.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260204072104_InitialCreate")]
+    [Migration("20260210172936_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
