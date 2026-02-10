@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using NutriTrack.src.Application.Features.Users.Commands.LoginUser;
 using NutriTrack.src.Application.Features.Users.Commands.RegisterUser;
 using NutriTrack.src.Domain.Core;
 
@@ -29,6 +30,19 @@ namespace NutriTrack.src.Controllers
 
                 return CreatedAtAction(nameof(Register), new { id = result.Value }, result.Value);
             }
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginUserCommand command)
+        {
+            var result = await _mediator.Send(command);
+
+            if (!result.IsSuccess)
+            {
+                return Unauthorized(new { error = result.Error });
+            }
+
+            return Ok(new { token = result.Value });
         }
     }
 }

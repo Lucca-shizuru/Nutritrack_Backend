@@ -1,6 +1,9 @@
-﻿namespace NutriTrack.src.Application.Interfaces
+﻿using NutriTrack.src.Domain.Entities;
+
+namespace NutriTrack.src.Application.Interfaces
 {
-    public interface IjwtTokenGenerator
+    public interface IJwtTokenGenerator
     {
+        string GenerateToken(User user);
     }
 }

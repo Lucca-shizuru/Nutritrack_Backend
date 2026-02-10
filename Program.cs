@@ -10,6 +10,9 @@ using NutriTrack.src.Infraestructure.ExternalServices;
 using NutriTrack.src.Infraestructure.Persistence;
 using NutriTrack.src.Infraestructure.Persistence.Repositories;
 using NutriTrack.src.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 
 namespace NutriTrack
@@ -70,6 +73,24 @@ namespace NutriTrack
                 });
             });
 
+            builder.Services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
+
+            // 2. Configuração da Autenticação JWT
+            var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+
+            builder.Services.AddAuthentication(defaultScheme: JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwtSettings["Issuer"],
+                    ValidAudience = jwtSettings["Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(jwtSettings["Secret"]!))
+                });
+
 
 
 
@@ -84,6 +105,8 @@ namespace NutriTrack
 
             app.UseHttpsRedirection();
 
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
 
