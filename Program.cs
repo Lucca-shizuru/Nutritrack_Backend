@@ -110,6 +110,8 @@ namespace NutriTrack
 
             builder.Services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
 
+            builder.Services.AddSingleton<ITranslationService, GoogleTranslationService>();
+
             // 2. Configuração da Autenticação JWT
             var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 

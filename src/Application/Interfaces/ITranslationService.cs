@@ -1,6 +1,7 @@
 ﻿namespace NutriTrack.src.Application.Interfaces
 {
-    public class ITranslationService
+    public interface ITranslationService
     {
+        Task<string> TranslateToEnglishAsync(string text);
     }
 }
