@@ -44,6 +44,18 @@ namespace NutriTrack.src.Domain.Entities
             Foods.Add(mealFood);
         }
 
+        public void ClearFoods()
+        {
+            _foods.Clear();
+        }
+
+        
+        public void UpdateDateAndType(DateTime date, MealType type)
+        {
+            Date = date;
+            Type = type;
+        }
+
         public NutritionalInfo GetTotalNutritionalInfo()
         {
             if (!Foods.Any()) return NutritionalInfo.Zero;
@@ -52,5 +64,6 @@ namespace NutriTrack.src.Domain.Entities
                 .Select(mf => mf.NutritionalInfo)
                 .Aggregate(NutritionalInfo.Zero, (current, next) => current + next);
         }
+
     }
 }
