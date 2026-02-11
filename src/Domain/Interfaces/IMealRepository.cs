@@ -6,6 +6,8 @@ namespace NutriTrack.src.Domain.Interfaces
     {
         Task<Meal?> GetByIdAsync(Guid id);
         Task<IEnumerable<Meal>> GetAllAsync();
+
+        Task<IEnumerable<Meal>> GetByUserIdAsync(Guid userId);
         void Add(Meal meal);
         void Update(Meal meal);
         void Delete(Meal meal);

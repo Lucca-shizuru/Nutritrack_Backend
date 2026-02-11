@@ -27,6 +27,14 @@ namespace NutriTrack.src.Infraestructure.Persistence.Repositories
                     .ThenInclude(mf => mf.Food)
                 .ToListAsync();
         }
+        public async Task<IEnumerable<Meal>> GetByUserIdAsync(Guid userId)
+        {
+            return await _context.Meals
+                .Include(m => m.Foods) 
+                .Where(m => m.UserId == userId)
+                .OrderByDescending(m => m.Date) 
+                .ToListAsync();
+        }
 
         public void Add(Meal meal)
         {
