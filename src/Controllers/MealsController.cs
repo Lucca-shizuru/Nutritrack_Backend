@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using NutriTrack.src.Application.Features.Meals.Commands.DeleteMeal;
 using NutriTrack.src.Application.Features.Meals.Commands.UpdateMeal;
 using NutriTrack.src.Application.Features.Meals.Queries.DailySummary;
+using NutriTrack.src.Application.Features.Meals.Queries.GetUserMeals;
 using NutriTrack.src.Application.Features.Users.Commands.CreateMeal;
 using NutriTrack.src.Infraestructure.ExternalServices.Dtos;
 
@@ -34,6 +35,18 @@ namespace NutriTrack.src.Controllers
         public async Task<ActionResult<DailySummaryResponse>> GetDailySummary([FromQuery] Guid userId, [FromQuery] DateTime date)
         {
             var query = new GetDailySummaryQuery(userId, date);
+            var result = await _mediator.Send(query);
+
+            return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
+        }
+
+        [HttpGet("history")]
+        public async Task<IActionResult> GetHistory()
+        {
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null) return Unauthorized();
+
+            var query = new GetUserMealsQuery(Guid.Parse(userId));
             var result = await _mediator.Send(query);
 
             return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
