@@ -17,6 +17,10 @@ namespace NutriTrack.src.Infraestructure.Persistence.Repositories
             _context.Users.Add(user); 
         }
 
+        public void Update(User user)
+        {
+            _context.Users.Update(user);
+        }
         public async Task<User?> GetByEmailAsync(string email)
         {
            return await _context.Users
