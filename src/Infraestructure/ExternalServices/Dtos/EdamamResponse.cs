@@ -6,12 +6,20 @@ namespace NutriTrack.src.Infraestructure.ExternalServices.Dtos
     {
         [JsonPropertyName("parsed")]
         public List<ParsedFoodDto> Parsed { get; set; } = new();
+
+        [JsonPropertyName("hints")]
+        public List<HintItem>? Hints { get; set; }
     }
 
     public class ParsedFoodDto
     {
         [JsonPropertyName("food")]
         public FoodDto Food { get; set; } = null!;
+    }
+
+    public class HintItem
+    {
+        public FoodDto? Food { get; set; }
     }
 
     public class FoodDto

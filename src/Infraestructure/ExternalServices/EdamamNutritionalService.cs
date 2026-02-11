@@ -2,6 +2,7 @@
 using NutriTrack.src.Application.Interfaces;
 using NutriTrack.src.Domain.Core;
 using NutriTrack.src.Infraestructure.ExternalServices.Dtos;
+using System.Net.Http.Json;
 
 
 namespace NutriTrack.src.Infraestructure.ExternalServices
@@ -17,8 +18,8 @@ namespace NutriTrack.src.Infraestructure.ExternalServices
         public EdamamNutritionalService(HttpClient httpClient, IConfiguration configuration)
         {
             _httpClient = httpClient;
-            _appId = configuration["EdamamApi:AppId"]!;
-            _appKey = configuration["EdamamApi:AppKey"]!;
+            _appId = configuration["EdamamApi:AppId"] ?? throw new ArgumentNullException("EdamamApi:AppId não configurado");
+            _appKey = configuration["EdamamApi:AppKey"] ?? throw new ArgumentNullException("EdamamApi:AppKey não configurado");
         }
 
         public async Task<Result<NutritionalInfo>> GetMacrosAsync(string foodName)
@@ -30,10 +31,24 @@ namespace NutriTrack.src.Infraestructure.ExternalServices
 
                 var response = await _httpClient.GetFromJsonAsync<EdamamResponse>(url);
 
-                var nutrients = response?.Parsed?.FirstOrDefault()?.Food?.Nutrients;
+            
 
-                if (nutrients == null)
+                if (response == null)
                     return Result<NutritionalInfo>.Failure("Alimento não encontrado na base da Edamam.");
+
+                FoodDto? foodData = response.Parsed?.FirstOrDefault()?.Food;
+
+             
+                if (foodData == null)
+                {
+                    foodData = response.Hints?.FirstOrDefault()?.Food;
+                }
+
+               
+                if (foodData?.Nutrients == null)
+                    return Result<NutritionalInfo>.Failure($"Alimento '{foodName}' não encontrado (nem em Parsed, nem em Hints).");
+
+                var nutrients = foodData.Nutrients;
 
                 return Result<NutritionalInfo>.Success(new NutritionalInfo(
                     nutrients.Calories,

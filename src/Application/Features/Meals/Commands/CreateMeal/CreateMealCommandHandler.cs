@@ -21,7 +21,16 @@ namespace NutriTrack.src.Application.Features.Meals.Commands.CreateMeal
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMealRepository _mealRepository;
         private readonly IPublishEndpoint _publishEndpoint;
-        public CreateMealCommandHandler(IUserRepository userRepository, IUnitOfWork unitOfWork, INutritionalDataService nutritionalDataService, IFoodRepository foodRepository, IMealRepository mealRepository, IPublishEndpoint publishEndpoint)
+        private readonly ITranslationService _translationService;
+        public CreateMealCommandHandler(
+            IUserRepository userRepository, 
+            IUnitOfWork unitOfWork, 
+            INutritionalDataService nutritionalDataService, 
+            IFoodRepository foodRepository, 
+            IMealRepository mealRepository, 
+            IPublishEndpoint publishEndpoint, 
+            ITranslationService translationService
+            )
         {
             _nutritionalDataService = nutritionalDataService;
             _userRepository = userRepository;
@@ -29,6 +38,7 @@ namespace NutriTrack.src.Application.Features.Meals.Commands.CreateMeal
             _foodRepository = foodRepository;
             _mealRepository = mealRepository;
             _publishEndpoint = publishEndpoint;
+            _translationService = translationService;
         }
         public async Task<Result<MealResponseDto>> Handle(CreateMealCommand request, CancellationToken cancellationToken)
         {
@@ -44,8 +54,19 @@ namespace NutriTrack.src.Application.Features.Meals.Commands.CreateMeal
             foreach (var item in request.Foods)
             {
 
-                var nutritionalResult = await _nutritionalDataService.GetMacrosAsync(item.FoodName);
-                if (!nutritionalResult.IsSuccess) continue;
+                var englishName = await _translationService.TranslateToEnglishAsync(item.FoodName);
+                Console.WriteLine($"[DEBUG] Traduzindo '{item.FoodName}' -> '{englishName}'");
+
+                var nutritionalResult = await _nutritionalDataService.GetMacrosAsync(englishName);
+
+                
+                if (!nutritionalResult.IsSuccess || nutritionalResult.Value is null )
+                {
+                    Console.WriteLine($"[ERRO] Edamam não encontrou: {englishName}");
+                    continue; 
+                }
+
+                Console.WriteLine($"[SUCESSO] Adicionando {item.FoodName}: {nutritionalResult.Value.Calories} kcal");
 
                 var food = await _foodRepository.GetByNameAsync(item.FoodName);
                 if (food == null)
@@ -81,7 +102,7 @@ namespace NutriTrack.src.Application.Features.Meals.Commands.CreateMeal
                     meal.TotalCalories
                 ), cancellationToken);
 
-    
+        
             var response = new MealResponseDto(
                 meal.Id,
                 user.Name,
