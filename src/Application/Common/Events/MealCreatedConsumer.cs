@@ -6,7 +6,9 @@ namespace NutriTrack.src.Application.Common.Events
     {
 
         public Task Consume(ConsumeContext<MealCreatedEvent> context)
+
         {
+
             var message = context.Message;
 
             Console.WriteLine($"[RabbitMQ] Processando refeição {message.MealId} do usuário {message.UserId}");
