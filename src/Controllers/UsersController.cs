@@ -18,7 +18,7 @@ namespace NutriTrack.src.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterUserCommand command)
         {
-            {
+            
                 var result = await _mediator.Send(command);
 
                 if (!result.IsSuccess)
@@ -29,7 +29,7 @@ namespace NutriTrack.src.Controllers
 
 
                 return CreatedAtAction(nameof(Register), new { id = result.Value }, result.Value);
-            }
+            
         }
 
         [HttpPost("login")]

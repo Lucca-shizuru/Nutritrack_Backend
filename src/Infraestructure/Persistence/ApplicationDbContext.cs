@@ -57,6 +57,19 @@ namespace NutriTrack.src.Infraestructure.Persistence
                        .OnDelete(DeleteBehavior.Cascade);
             });
 
+            modelBuilder.Entity<Food>(entity =>
+            {
+                
+                
+                entity.OwnsOne(f => f.BaseNutritionalInfo, macros =>
+                {
+                    macros.Property(n => n.Calories).HasColumnName("BaseCalories");
+                    macros.Property(n => n.Protein).HasColumnName("BaseProtein");
+                    macros.Property(n => n.Carbs).HasColumnName("BaseCarbs");
+                    macros.Property(n => n.Fat).HasColumnName("BaseFat");
+                });
+            });
+
 
         }
     }
