@@ -36,3 +36,24 @@ Infrastructure
 git clone https://github.com/Lucca-shizuru/Nutritrack_Backend
 cd Nutritrack_Backend
 docker compose up
+
+🔐 Autenticação
+
+A API utiliza JWT para autenticação.
+
+Fluxo:
+	1.	Registrar usuário
+	2.	Fazer login
+	3.	Receber token
+	4.	Enviar token no header
+    
+📷 Demonstração
+
+Swagger da API:
+
+
+
+Arquitetura do projeto:
+
+
+
